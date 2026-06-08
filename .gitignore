@@ -6,3 +6,6 @@ node_modules/
 /playwright/.cache/
 .env
 Support/auth/user.json
+# Allure Reports
+allure-results/
+allure-report/
