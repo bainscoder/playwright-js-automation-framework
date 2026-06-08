@@ -1,0 +1,11 @@
+{
+  "returningCustomerHeading": "Returning Customer",
+  "errorMessageOnLogin": "Login was unsuccessful. Please correct the errors and try again.",
+  "logoutText": "Log out",
+  "homePageTitle": "Demo Web Shop",
+  "featuredProductsHeading": "FEATURED PRODUCTS",
+  "welcomeMessage": "Welcome to our store",
+  "searchProduct": "Smartphone",
+  "newsletterSuccessMessage": "Thank you for signing up!",
+  "invalidProduct": "XYZ123INVALID"
+}
