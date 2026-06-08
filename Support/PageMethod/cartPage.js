@@ -9,78 +9,56 @@ class CartPage {
     this.shoppingCartLink = page
       .getByRole("link", { name: /shopping cart/i })
       .first();
-
     this.cartQuantity = page.locator(".cart-qty").first();
     this.quantityInput = page.locator(".qty-input");
-
     this.updateCartButton = page
       .getByRole("button", { name: "Update shopping cart" })
       .first();
-
     this.productSubtotal = page.locator(".product-subtotal");
     this.removeCheckbox = page.locator('[name="removefromcart"]');
-
     this.termAndServicesCheckbox = page.locator("#termsofservice").first();
     this.checkoutBtn = page.locator("#checkout").first();
-
     this.cityInput = page.locator("#BillingNewAddress_City");
     this.address1Input = page.locator("#BillingNewAddress_Address1");
     this.zipCodeInput = page.locator("#BillingNewAddress_ZipPostalCode");
     this.phoneNumberInput = page.locator("#BillingNewAddress_PhoneNumber");
-
     this.continueButton = page.locator('[title="Continue"]').first();
     this.billingContinueButton = page.locator('[title="Continue"]').first();
-
     this.shippingAddressContinueButton = page
       .locator('[title="Continue"]')
       .last();
-
     this.shippingMethodContinueButton = page.locator(
-      "#shipping-method-buttons-container input"
+      "#shipping-method-buttons-container input",
     );
-
     this.paymentMethodContinueButton = page.locator(
-      "#payment-method-buttons-container input"
+      "#payment-method-buttons-container input",
     );
-
     this.paymentInfoContinueButton = page.locator(
-      "#payment-info-buttons-container input"
+      "#payment-info-buttons-container input",
     );
-
     this.confirmOrderButton = page.locator(
-      "#confirm-order-buttons-container input"
+      "#confirm-order-buttons-container input",
     );
-
     this.countryDropdown = page.getByLabel("Country:");
-
     this.shippingAddressHeading = page
       .locator("h2")
       .filter({ hasText: "Shipping address" });
-
     this.shippingMethodHeading = page
       .locator("h2")
       .filter({ hasText: "Shipping method" });
-
     this.paymentMethodHeading = page
       .locator("h2")
       .filter({ hasText: "Payment method" });
-
     this.paymentInformationHeading = page
       .locator("h2")
       .filter({ hasText: "Payment information" });
-
     this.confirmOrderHeading = page
       .locator("h2")
       .filter({ hasText: "Confirm order" });
-
-    this.cashOnDeliveryRadioButton = page.getByLabel(
-      "Cash On Delivery (COD)"
-    );
-
+    this.cashOnDeliveryRadioButton = page.getByLabel("Cash On Delivery (COD)");
     this.paymentInformationText = page.getByText("You will pay by COD");
-
     this.orderSuccessMessage = page.getByText(
-      "Your order has been successfully processed!"
+      "Your order has been successfully processed!",
     );
 
     this.billingAddressDropdown = page

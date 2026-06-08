@@ -20,11 +20,10 @@ export default defineConfig({
 
   workers: process.env.CI ? 1 : 1,
 
-  reporter: "html",
+  reporter: [["html"],['list']],
 
   use: {
     baseURL: process.env.BASE_URL,
-    //baseURL: "https://demowebshop.tricentis.com/",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
     trace: "retain-on-failure",

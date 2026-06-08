@@ -14,10 +14,8 @@ export class SignInPage {
     this.heading = page.getByText(data.returningCustomerHeading);
     this.loginButton = page.getByRole("button", { name: "Log in" });
     this.errorMessage = page.getByText(data.errorMessageOnLogin);
-
     this.emailField = page.locator("#Email");
     this.passwordField = page.locator("#Password");
-
     this.logoutLink = page.getByText(data.logoutText);
   }
 

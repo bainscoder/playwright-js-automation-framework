@@ -9,49 +9,30 @@ export class ElectronicsPage {
     this.electronicsTab = page
       .getByRole("link", { name: "Electronics" })
       .first();
-
     this.cellPhonesCategory = page
       .locator(".sub-category-grid .item-box .title")
       .last();
-
-    this.firstProduct = page
-      .locator(".product-item .product-title a")
-      .first();
-
+    this.firstProduct = page.locator(".product-item .product-title a").first();
     this.productPrice = page.locator('[itemprop="price"]');
-
     this.addToCartButton = page
       .getByRole("button", { name: "Add to cart" })
       .first();
-
     this.successNotification = page.locator(".content");
   }
 
   async navigateToElectronicsPage() {
     await this.page.goto("/");
-
-    const responsePromise = validateApiResponse(
-      this.page,
-      "/electronics"
-    );
-
+    const responsePromise = validateApiResponse(this.page, "/electronics");
     await clickWebElement(this.electronicsTab);
     await responsePromise;
-
     await expect(this.page).toHaveURL(/electronics/);
   }
 
   async openCellPhonesCategory() {
     await this.navigateToElectronicsPage();
-
-    const responsePromise = validateApiResponse(
-      this.page,
-      "/cell-phones"
-    );
-
+    const responsePromise = validateApiResponse(this.page, "/cell-phones");
     await clickWebElement(this.cellPhonesCategory);
     await responsePromise;
-
     await expect(this.page).toHaveURL(/cell-phones/);
   }
 
@@ -67,9 +48,8 @@ export class ElectronicsPage {
 
   async addFirstProductToCart() {
     await clickWebElement(this.addToCartButton);
-
     await expect(this.successNotification).toContainText(
-      "The product has been added to your shopping cart"
+      "The product has been added to your shopping cart",
     );
   }
 

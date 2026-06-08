@@ -13,29 +13,19 @@ export class HomePage {
     this.searchBox = page.locator('[value="Search store"]');
     this.searchButtonWithValue = page.locator('[value="Search"]');
     this.searchButtonWithoutValue = page.locator('[value="Search"]');
-
-    this.featuredProductsHeading = page.getByText(
-      data.featuredProductsHeading
-    );
-
+    this.featuredProductsHeading = page.getByText(data.featuredProductsHeading);
     this.welcomeMessage = page.getByText(data.welcomeMessage);
-
     this.userEmail = page.getByRole("link", {
       name: /@gmail\.com/i,
     });
-
     this.logoutLink = page.getByText("Log out");
     this.shoppingCartLink = page.locator(".cart-label").first();
-
     this.searchResultProduct = page.locator(".ui-menu-item a");
     this.smartphoneLink = page.locator(".ui-menu-item a");
-
     this.featuredProducts = page.locator(".product-item");
-
     this.noResultMessage = page.getByText("No products were found");
-
     this.searchValidationMessage = page.getByText(
-      "Search term minimum length is 3 characters"
+      "Search term minimum length is 3 characters",
     );
   }
 
@@ -57,11 +47,7 @@ export class HomePage {
   }
 
   async verifyLoggedInUser() {
-    const elements = [
-      this.userEmail,
-      this.logoutLink,
-      this.shoppingCartLink,
-    ];
+    const elements = [this.userEmail, this.logoutLink, this.shoppingCartLink];
 
     for (const element of elements) {
       await expect(element).toBeVisible();
@@ -94,9 +80,7 @@ export class HomePage {
 
   async verifyAlertPopupMessage() {
     this.page.on("dialog", async (dialog) => {
-      expect(dialog.message()).toBe(
-        "Please enter some search keyword"
-      );
+      expect(dialog.message()).toBe("Please enter some search keyword");
       await dialog.accept();
     });
 
