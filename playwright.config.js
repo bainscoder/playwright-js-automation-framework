@@ -20,7 +20,7 @@ export default defineConfig({
 
   workers: process.env.CI ? 1 : 1,
 
-  reporter: [["html"],['list'],["allure-playwright"]],
+  reporter: [["html"],['list'],["allure-playwright"],['./Support/Utils/customReporter.js']],
 
   use: {
     baseURL: process.env.BASE_URL,
