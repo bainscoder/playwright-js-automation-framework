@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -22,8 +22,15 @@ jobs:
       PASSWORD: ${{ secrets.PASSWORD }}
 
     steps:
-      - name: Checkout Code
+      - name: Checkout Repository
         uses: actions/checkout@v4
+
+      - name: Checkout History Branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-dashboard
+          path: history
+        continue-on-error: true
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -36,7 +43,28 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Run Tests
+      - name: Restore Previous Execution History
+        run: |
+          mkdir -p execution-data
+
+          if [ -f history/execution-data/execution-history.json ]; then
+            cp history/execution-data/execution-history.json execution-data/
+            echo "Previous history restored"
+          else
+            echo "No previous history found"
+          fi
+
+      - name: Verify Restored History
+        run: |
+          echo "===== HISTORY ====="
+
+          if [ -f execution-data/execution-history.json ]; then
+            cat execution-data/execution-history.json
+          else
+            echo "History file missing"
+          fi
+
+      - name: Run Playwright Tests
         run: npx playwright test
 
       - name: Generate Allure Report
@@ -45,6 +73,86 @@ jobs:
           npm install -g allure-commandline
           allure generate allure-results --clean -o allure-report
 
+      - name: Verify Generated Files
+        if: always()
+        run: |
+          echo "===== EXECUTION DATA ====="
+          find execution-data -type f || true
+
+          echo ""
+          echo "===== ALLURE REPORT ====="
+          find allure-report -type f || true
+
+      - name: Save Updated History
+        if: always()
+        run: |
+          mkdir -p history/execution-data
+
+          if [ -f execution-data/execution-history.json ]; then
+
+            cp execution-data/execution-history.json history/execution-data/
+
+            cd history
+
+            git config user.name "github-actions"
+            git config user.email "github-actions@github.com"
+
+            git add -f execution-data/execution-history.json
+
+            git commit -m "Update execution history" || echo "No changes"
+
+            git push origin gh-dashboard || echo "Nothing to push"
+
+          else
+            echo "execution-history.json not found"
+          fi
+
+      - name: Create Site Structure
+        if: always()
+        run: |
+          mkdir -p site/allure
+          mkdir -p site/dashboard
+
+          cp -R allure-report/* site/allure/
+          cp -R execution-data/* site/dashboard/
+
+      - name: Create Home Page
+        if: always()
+        run: |
+          cat > site/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>Playwright Automation Reports</title>
+          </head>
+          <body>
+
+              <h1>Playwright Automation Reports</h1>
+
+              <ul>
+                  <li>
+                      <a href="./allure/index.html">
+                          Allure Report
+                      </a>
+                  </li>
+
+                  <li>
+                      <a href="./dashboard/execution-dashboard.html">
+                          Execution Dashboard
+                      </a>
+                  </li>
+              </ul>
+
+          </body>
+          </html>
+          EOF
+
+      - name: Upload GitHub Pages Artifact
+        if: always()
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
       - name: Upload Allure Report Artifact
         if: always()
         uses: actions/upload-artifact@v4
@@ -52,13 +160,19 @@ jobs:
           name: allure-report
           path: allure-report
 
-      - name: Upload Pages Artifact
-        if: always()
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./allure-report
+  deploy:
+    needs: test
 
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+
+    permissions:
+      pages: write
+      id-token: write
+
+    steps:
       - name: Deploy to GitHub Pages
-        if: always()
         id: deployment
         uses: actions/deploy-pages@v4
