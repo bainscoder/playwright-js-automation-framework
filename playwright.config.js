@@ -3,6 +3,19 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+if (!process.env.BASE_URL) {
+  throw new Error(`
+❌ Missing environment configuration
+The BASE_URL environment variable is not defined.
+Setup Instructions:
+1. Copy ".env.example" to ".env"
+2. Update the BASE_URL value in the .env file
+3. Run the tests again
+Example:
+BASE_URL=https://your-application-url.com
+`);
+}
+
 export default defineConfig({
   timeout: 90000,
 
