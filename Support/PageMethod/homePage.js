@@ -90,5 +90,5 @@ export class HomePage {
   async verifySearchValidationMessage() {
     await clickWebElement(this.searchButtonWithValue);
     await expect(this.searchValidationMessage).toBeVisible();
-  }
+  } 
 }
